@@ -1,5 +1,5 @@
 # github-release-cli
-Command line tool for create Github releases through Github API.
+Command line tool written in Python for creating Github releases through Github REST API.
 
 ## Installation
 ```
