@@ -37,3 +37,6 @@ optional arguments:
   --draft               create a draft (unpublished) release
   --prerelease          identify the release as a prerelease
 ```
+
+## Extensions
+`auto_release.sh` is an executable script which is designed to publish Python packages to both Github (via publish_github_release.py) and [PyPI](https://pypi.org/).
