@@ -39,4 +39,4 @@ optional arguments:
 ```
 
 ## Extensions
-`auto_release.sh` is an executable script which is designed to publish Python packages to both Github (via publish_github_release.py) and [PyPI](https://pypi.org/).
+`auto_release_python.sh` is an executable script which is designed to publish Python packages to both Github (via publish_github_release.py) and [PyPI](https://pypi.org/).
