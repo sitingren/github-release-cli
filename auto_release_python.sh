@@ -7,12 +7,10 @@ echo "This program releases a python package on Github and PyPI. Please check pr
 echo "  Set the Github repository owner via GITHUB_OWNER environment variable, e.g. export GITHUB_OWNER=xxx"
 echo "  Set the Github repository name via GITHUB_REPO environment variable, e.g. export GITHUB_REPO=github-release-cli"
 echo "  Set the Github access token via GITHUB_TOKEN environment variable. The token should have push access to the repository."
-echo "  Set the PyPI account username via TWINE_USERNAME environment variable."
-echo "  Set the PyPI account password via TWINE_PASSWORD environment variable."
+echo "  Set the PyPI account username via TWINE_USERNAME environment variable. Current TWINE_USERNAME="$TWINE_USERNAME
+echo "  Set the PyPI account password via TWINE_PASSWORD environment variable. Current TWINE_PASSWORD="$TWINE_PASSWORD
 echo "  Set the path to Python interpreter via PYTHON environment variable. Default to use 'python3'."
-echo "  Ensure you have installed 'twine', otherwise call 'pip install twine' to install."
-echo "  Ensure you have installed 'agithub', otherwise call 'pip install arestclient' to install."
-[ -f publish_github_release.py ] || echo "  Ensure publish_github_release.py is located in current directory."
+echo "  Ensure you have installed 'twine' for publishing to PyPI, otherwise call 'pip install twine' to install."
 echo "  Confirm you have updated the version number in source code and setup.py."
 echo ""
 read -p "Press <Enter> to continue or <Ctrl-C> to exit ... " answer
@@ -69,8 +67,33 @@ cd ../..
 # Publish to Github
 ########################
 echo -e "\n\n>>> Publishing to Github"
-$PYTHON publish_github_release.py -o $GITHUB_OWNER -r $GITHUB_REPO -V $version -a $filepath -t $GITHUB_TOKEN
 
+response=$(curl \
+  -X POST \
+  -H "Accept: application/vnd.github+json" \
+  -H "Authorization: Bearer $GITHUB_TOKEN"\
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/releases \
+  -d '{"tag_name":"'$version'","target_commitish":"master","name":"'$version'","draft":false,"prerelease":false,"generate_release_notes":true}')
+
+regex='"id": ([0-9]+),'
+[[ $response =~ $regex ]]
+release_id=${BASH_REMATCH[1]}
+echo $response
+echo "--> Github release_id: $release_id"
+echo ""
+echo "Uploading an asset to Github ..."
+if [ -z "$release_id" ]
+then
+  echo "Cannot get release_id. Skipped."
+else
+  curl -X POST \
+     -H "Content-Type: $(file -b --mime-type $filepath)" \
+     -T "$filepath" \
+     -H "Authorization: token $GITHUB_TOKEN" \
+     -H "Accept: application/vnd.github.v3+json" \
+     https://uploads.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/releases/$release_id/assets?name=$wheelfile | cat
+fi
 
 ########################
 # Wrap-up
