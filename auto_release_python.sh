@@ -27,7 +27,13 @@ cd $TMPDIR
 git clone git@github.com:$GITHUB_OWNER/$GITHUB_REPO.git -q
 echo "Cloned repository"
 cd $GITHUB_REPO
-echo -e "\n\n>>> Generating distribution archives"
+branch="$(git rev-parse --abbrev-ref HEAD)"
+if [ "$branch" = "" ]
+then
+    echo "Error: Cannot find branch name. Ensure you are within a git repository."
+    exit
+fi
+echo -e "\n\n>>> Generating distribution archives from '$branch' branch"
 # generate wheel file and compressed source file
 $PYTHON setup.py -q sdist bdist_wheel #--universal
 echo -e "\n\n>>> Generated distribution archives:"
@@ -74,12 +80,12 @@ response=$(curl \
   -H "Authorization: Bearer $GITHUB_TOKEN"\
   -H "X-GitHub-Api-Version: 2022-11-28" \
   https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/releases \
-  -d '{"tag_name":"'$version'","target_commitish":"master","name":"'$version'","draft":false,"prerelease":false,"generate_release_notes":true}')
+  -d '{"tag_name":"'$version'","target_commitish":"'$branch'","name":"'$version'","draft":false,"prerelease":false,"generate_release_notes":true}')
+echo $response
 
 regex='"id": ([0-9]+),'
 [[ $response =~ $regex ]]
 release_id=${BASH_REMATCH[1]}
-echo $response
 echo "--> Github release_id: $release_id"
 echo ""
 echo "Uploading an asset to Github ..."
