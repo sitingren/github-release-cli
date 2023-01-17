@@ -29,7 +29,7 @@ echo "Cloned repository"
 cd $GITHUB_REPO
 echo -e "\n\n>>> Generating distribution archives"
 # generate wheel file and compressed source file
-$PYTHON setup.py -q sdist bdist_wheel --universal
+$PYTHON setup.py -q sdist bdist_wheel #--universal
 echo -e "\n\n>>> Generated distribution archives:"
 ls dist/
 trap 'echo -e "\nPlease delete $TMPDIR directory if you do not need archives any more"' EXIT
