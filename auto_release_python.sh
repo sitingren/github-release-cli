@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 # Path to Python interpreter
 PYTHON=${PYTHON:-python3}
@@ -7,11 +7,20 @@ echo "This program releases a python package on Github and PyPI. Please check pr
 echo "  Set the Github repository owner via GITHUB_OWNER environment variable, e.g. export GITHUB_OWNER=xxx"
 echo "  Set the Github repository name via GITHUB_REPO environment variable, e.g. export GITHUB_REPO=github-release-cli"
 echo "  Set the Github access token via GITHUB_TOKEN environment variable. The token should have push access to the repository."
-echo "  Set the PyPI account username via TWINE_USERNAME environment variable. Current TWINE_USERNAME="$TWINE_USERNAME
-echo "  Set the PyPI account password via TWINE_PASSWORD environment variable. Current TWINE_PASSWORD="$TWINE_PASSWORD
+echo "  Set the PyPI account username via TWINE_USERNAME environment variable."
+echo "  Set the PyPI account password via TWINE_PASSWORD environment variable."
 echo "  Set the path to Python interpreter via PYTHON environment variable. Default to use 'python3'."
 echo "  Ensure you have installed 'twine' for publishing to PyPI, otherwise call 'pip install twine' to install."
 echo "  Confirm you have updated the version number in source code and setup.py."
+echo ""
+echo "Current settings:"
+echo "    GITHUB_OWNER=$GITHUB_OWNER"
+echo "    GITHUB_REPO=$GITHUB_REPO"
+echo "    GITHUB_TOKEN=$GITHUB_TOKEN"
+echo "    TWINE_USERNAME=$TWINE_USERNAME"
+echo "    TWINE_PASSWORD=$TWINE_PASSWORD"
+echo "    PYTHON=$PYTHON"
+echo "    'twine' package detection: `$PYTHON -m pip list|grep 'twine '`"
 echo ""
 read -p "Press <Enter> to continue or <Ctrl-C> to exit ... " answer
 
