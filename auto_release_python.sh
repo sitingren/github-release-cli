@@ -116,4 +116,4 @@ fi
 echo -e "\n\nFinal checklist:"
 echo "1. View PyPI url (https://pypi.org/project/$GITHUB_REPO/#files) and check files uploaded"
 echo "2. View Github url (https://github.com/$GITHUB_OWNER/$GITHUB_REPO/releases) and add descriptions if needed"
-echo -e "3. Try pip installation (pip install $package_name --user) and verify package version number with \n\t\"pip list | grep $package_name\" and \n\t\"python -c 'import vertica_python; print(vertica_python.__version__)'\""
+echo -e "3. Try pip installation ($PYTHON -m pip install $package_name --user) and verify package version number with \n\t\"$PYTHON -m pip list | grep $package_name\" and \n\t\"$PYTHON -c 'import vertica_python; print(vertica_python.__version__)'\""
