@@ -9,7 +9,7 @@ except ImportError as e:
     sys.exit(1)
 
 # Target Github repository
-owner,repo = 'vertica','vertica-python'
+owner, repo = 'vertica', 'vertica-python'
 
 # Create a GitHub object using an access token
 g = GitHub(token='ADD YOUR GITHUB ACCESS TOKEN HERE!')
@@ -19,7 +19,7 @@ status, repoinfo = g.repos[owner][repo].get()
 forks_count = repoinfo['forks_count']
 stargazers_count = repoinfo['stargazers_count']
 watchers_count = repoinfo['subscribers_count']
-print('\n\nwatch:{}  star:{}  fork:{}'.format(watchers_count, stargazers_count, forks_count))
+print(f'\n\nwatch:{watchers_count}  star:{stargazers_count}  fork:{forks_count}')
 
 # Get the total number of views and breakdown per day for the last 14 days
 status, views = g.repos[owner][repo].traffic.views.get()
@@ -30,4 +30,3 @@ pprint.pprint(views)
 status, clones = g.repos[owner][repo].traffic.clones.get()
 print("\n\n==> Clones")
 pprint.pprint(clones)
-
