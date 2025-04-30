@@ -40,3 +40,5 @@ optional arguments:
 
 ## Extensions
 `auto_release_python.sh` is an executable script which is designed to publish Python packages to both Github (via publish_github_release.py) and [PyPI](https://pypi.org/).
+
+`collect_github_insights.py` is a python script which can collect insights (number of views, clones, watchers, stargazers and forks) of a Github repository.
